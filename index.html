@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Refugio del Sol · Restaurante y cuartos</title>
+  <meta name="description" content="Consulta el menú de Refugio del Sol y cotiza tu cuarto desde el celular.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav>
+    <div class="wrap">
+      <b>Refugio del Sol</b>
+      <a href="#menu">Menú</a>
+      <a href="#cuartos">Cuartos</a>
+      <a href="#cotizar">Cotizar</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="sun" aria-hidden="true"></div>
+    <div class="sea" aria-hidden="true"></div>
+    <div class="wrap">
+      <h1>Refugio del Sol</h1>
+      <p>Come bien, descansa mejor. Restaurante y cuartos frente al atardecer.</p>
+      <div class="acciones">
+        <a class="btn" href="#menu">Ver menú</a>
+        <a class="btn alt" href="#cotizar">Cotizar mi estancia</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="menu">
+      <div class="wrap">
+        <h2>Menú</h2>
+        <p class="sub">⭐ favorito de la casa · 🌶️ picante · 🌱 vegetariano</p>
+        <div class="tabs" role="tablist" id="tabs" aria-label="Categorías del menú"></div>
+        <div id="lista" role="tabpanel"></div>
+      </div>
+    </section>
+
+    <section id="cuartos">
+      <div class="wrap">
+        <h2>Cuartos</h2>
+        <p class="sub">Tarifas por noche. En temporada alta el precio sube.</p>
+        <div class="rooms" id="rooms"></div>
+
+        <form class="quote" id="cotizar" novalidate>
+          <h3>Cotiza tu estancia</h3>
+          <label>Entrada <input type="date" name="entrada" required></label>
+          <label>Salida <input type="date" name="salida" required></label>
+          <label>Adultos <input type="number" name="adultos" min="1" max="10" value="2"></label>
+          <label>Niños <input type="number" name="ninos" min="0" max="10" value="0"></label>
+          <label class="full">Tipo de cuarto <select name="cuarto"></select></label>
+          <fieldset id="extras"><legend>Extras</legend></fieldset>
+          <button class="btn full" type="submit">Calcular cotización</button>
+          <div id="resultado" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer id="contacto">
+    <div class="wrap">
+      <h2>Contacto</h2>
+      <p id="direccion"></p>
+      <p id="horario"></p>
+      <p><a class="btn" id="wa-contacto" href="#">Escríbenos por WhatsApp</a></p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

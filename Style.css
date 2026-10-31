@@ -1,0 +1,78 @@
+:root{--ink:#12303A;--sea:#1F6F78;--sun:#F2A900;--salt:#F1F6F4;--coral:#C9453F;--line:#cfe0dc}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:60px}
+body{margin:0;font:400 1rem/1.55 'DM Sans',system-ui,sans-serif;color:var(--ink);background:var(--salt)}
+h1,h2,h3{font-family:'Bricolage Grotesque','DM Sans',system-ui,sans-serif;line-height:1.1;margin:0}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+:focus-visible{outline:3px solid var(--sea);outline-offset:2px}
+
+/* Navegación */
+nav{position:sticky;top:0;z-index:10;background:var(--ink);color:#fff}
+nav .wrap{display:flex;gap:20px;align-items:center;height:52px;overflow-x:auto}
+nav b{font-family:'Bricolage Grotesque',sans-serif;margin-right:auto;white-space:nowrap}
+nav a{color:#fff;text-decoration:none;white-space:nowrap;font-weight:500}
+nav a:hover{color:var(--sun)}
+
+/* Portada */
+.hero{background:var(--ink);color:#fff;position:relative;overflow:hidden;padding:72px 0 150px}
+.hero .wrap{position:relative;z-index:2}
+.hero h1{font-size:clamp(2.8rem,10vw,5.8rem);font-weight:800;max-width:8ch}
+.hero p{max-width:32ch;font-size:1.15rem;opacity:.88;margin:16px 0 0}
+.acciones{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.sun{position:absolute;right:-50px;bottom:44px;width:min(62vw,340px);aspect-ratio:1;border-radius:50%;background:var(--sun);animation:rise 1.6s ease-out both}
+.sea{position:absolute;left:0;right:0;bottom:0;height:96px;z-index:1;background:repeating-linear-gradient(var(--sea) 0 10px,#175a62 10px 20px)}
+@keyframes rise{from{transform:translateY(130%)}}
+@media (prefers-reduced-motion:reduce){.sun{animation:none}html{scroll-behavior:auto}}
+
+/* Botones */
+.btn{display:inline-block;padding:12px 22px;border-radius:999px;background:var(--sun);color:var(--ink);font:700 1rem 'DM Sans',sans-serif;text-decoration:none;border:2px solid var(--sun);cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.alt{background:transparent;color:#fff;border-color:#fff}
+.btn.wa{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* Secciones */
+section{padding:56px 0}
+h2{font-size:clamp(1.9rem,5vw,2.7rem);margin-bottom:8px}
+.sub{margin:0 0 24px;color:#4b6670;max-width:60ch}
+
+/* Menú */
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px}
+.tabs button{border:2px solid var(--ink);background:none;color:var(--ink);padding:8px 16px;border-radius:999px;font:500 1rem 'DM Sans',sans-serif;cursor:pointer;white-space:nowrap}
+.tabs button[aria-selected=true]{background:var(--ink);color:#fff}
+.item{display:flex;justify-content:space-between;gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
+.item h3{font-size:1.15rem}
+.item p{margin:4px 0 0;color:#4b6670;font-size:.95rem;max-width:56ch}
+.price{font-weight:700;white-space:nowrap}
+.item.out{opacity:.55}
+.item.out .price{color:var(--coral)}
+.tag{font-size:.8rem;margin-left:6px;vertical-align:middle}
+
+/* Cuartos */
+#cuartos{background:#fff}
+.rooms{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+.room{border:2px solid var(--ink);border-radius:6px 28px 6px 28px;padding:22px}
+.room h3{font-size:1.4rem}
+.room ul{padding-left:18px;margin:12px 0}
+.room .tarifa{font-weight:700}
+.room small{display:block;color:#4b6670}
+
+/* Cotizador */
+.quote{margin-top:40px;background:var(--salt);border-radius:16px;padding:24px;display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.quote h3{grid-column:1/-1;font-size:1.6rem}
+label{display:grid;gap:4px;font-weight:500;font-size:.95rem}
+input,select{font:inherit;padding:10px;border:1px solid #8fb0aa;border-radius:8px;background:#fff;color:var(--ink);width:100%}
+fieldset{grid-column:1/-1;border:1px solid var(--line);border-radius:8px;display:grid;gap:8px;padding:12px 16px}
+fieldset label{display:flex;gap:8px;align-items:center;font-weight:400}
+fieldset input{width:auto}
+.full{grid-column:1/-1}
+#resultado{grid-column:1/-1;margin:0}
+.error{color:var(--coral);font-weight:500}
+.desglose{background:#fff;border-radius:12px;padding:16px 20px}
+.desglose div{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px dashed var(--line)}
+.desglose .total{border:0;font:800 1.5rem 'Bricolage Grotesque',sans-serif;padding-top:12px}
+.aviso{font-size:.9rem;color:#4b6670;margin:12px 0}
+
+/* Pie de página */
+footer{background:var(--ink);color:#fff;padding:48px 0}
+footer h2{color:var(--sun)}
+footer p{margin:6px 0}
