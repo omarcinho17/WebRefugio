@@ -2,8 +2,8 @@
 const CONFIG = {
   nombre: 'Refugio del Sol',
   whatsapp: '5219610000000',               // lada + número, sin + ni espacios
-  direccion: 'Dirección del restaurante',
-  horario: 'Todos los días de 8:00 a 21:00',
+  direccion: 'Embarcadero Chocohuital S/N, 30545 Pijijiapan, Chis.',
+  horario: 'Club de playa y restaurante abierto, sabados y domingos de 8:00 a 18:00',
   mesesAltos: [7, 8, 12]                   // 1 = enero ... 12 = diciembre
 };
 
@@ -33,10 +33,12 @@ const MENU = {
   ]
 };
 
+// cantidad = cuántas habitaciones de ese tipo existen
 const CUARTOS = [
-  {id:'sencillo', n:'Cuarto sencillo', cap:2, baja:600, alta:850, inc:['Ventilador','Baño privado','Cama matrimonial']},
-  {id:'vista', n:'Cuarto con vista al mar', cap:3, baja:900, alta:1250, inc:['Aire acondicionado','Baño privado','Terraza con hamaca']},
-  {id:'familiar', n:'Cuarto familiar', cap:4, baja:1100, alta:1500, inc:['Aire acondicionado','Baño privado','Dos camas matrimoniales']}
+  {id:'sencilla', n:'Habitación sencilla', cap:3, cantidad:2, baja:1200, alta:1600,
+   inc:['Baño privado','Para 2 adultos y 1 menor']},
+  {id:'doble', n:'Habitación doble', cap:4, cantidad:2, baja:1400, alta:1800,
+   inc:['Baño privado','Para 4 personas']}
 ];
 
 const EXTRAS = [
@@ -55,12 +57,16 @@ const wa = (texto) => `https://wa.me/${CONFIG.whatsapp}${texto ? '?text=' + enco
 function pintarMenu(cat) {
   $('#lista').innerHTML = MENU[cat].map(i => `
     <article class="item ${i.agotado ? 'out' : ''}">
-      <div>
+      <div class="foto">
+        ${i.foto ? `<img src="${i.foto}" alt="${i.n}" loading="lazy">` : '<span>Foto próximamente</span>'}
+      </div>
+      <div class="info">
         <h3>${i.n}${(i.t || []).map(t => `<span class="tag" title="${t}">${ICONOS[t]}</span>`).join('')}</h3>
         <p>${i.d}</p>
+        <span class="price">${i.agotado ? 'Agotado' : mxn(i.p)}</span>
       </div>
-      <span class="price">${i.agotado ? 'Agotado' : mxn(i.p)}</span>
     </article>`).join('');
+  $('#lista').scrollLeft = 0;
   document.querySelectorAll('#tabs button').forEach(b => b.setAttribute('aria-selected', b.textContent === cat));
 }
 $('#tabs').innerHTML = Object.keys(MENU).map(c => `<button role="tab" type="button">${c}</button>`).join('');
@@ -71,14 +77,20 @@ pintarMenu(Object.keys(MENU)[0]);
 $('#rooms').innerHTML = CUARTOS.map(c => `
   <article class="room">
     <h3>${c.n}</h3>
-    <ul>${c.inc.map(x => `<li>${x}</li>`).join('')}<li>Hasta ${c.cap} personas</li></ul>
+    <ul>${c.inc.map(x => `<li>${x}</li>`).join('')}<li>Hasta ${c.cap} personas</li><li>Disponibilidad sujeta a temporada</li></ul>
     <div class="tarifa">${mxn(c.baja)} por noche</div>
     <small>Temporada alta: ${mxn(c.alta)}</small>
   </article>`).join('');
 
 /* ============ COTIZADOR ============ */
 const form = $('#cotizar');
-form.cuarto.innerHTML = CUARTOS.map(c => `<option value="${c.id}">${c.n} (hasta ${c.cap})</option>`).join('');
+
+// Un campo de cantidad por cada tipo de habitación
+$('#habitaciones').innerHTML = CUARTOS.map((c, i) => `
+  <label>${c.n} · ${mxn(c.baja)} por noche · hasta ${c.cap} personas
+    <input type="number" name="hab-${c.id}" min="0" max="${c.cantidad}" value="${i === 0 ? 1 : 0}">
+  </label>`).join('');
+
 $('#extras').insertAdjacentHTML('beforeend', EXTRAS.map(x => `
   <label><input type="checkbox" name="extra" value="${x.id}"> ${x.n} · ${mxn(x.precio)} ${x.txt}</label>`).join(''));
 
@@ -103,10 +115,16 @@ form.addEventListener('submit', (e) => {
   const adultos = Math.max(1, +form.adultos.value || 1);
   const ninos = Math.max(0, +form.ninos.value || 0);
   const personas = adultos + ninos;
-  const cuarto = CUARTOS.find(c => c.id === form.cuarto.value);
+
+  // Habitaciones elegidas: lista de {cuarto, cant}
+  const elegidas = CUARTOS
+    .map(c => ({cuarto: c, cant: Math.min(c.cantidad, Math.max(0, +form.elements['hab-' + c.id].value || 0))}))
+    .filter(h => h.cant > 0);
+  if (!elegidas.length) return error('Elige al menos una habitación.');
+
   const extras = EXTRAS.filter(x => form.querySelector(`input[value="${x.id}"]`).checked);
-  const capacidad = cuarto.cap + (extras.some(x => x.id === 'cama') ? 1 : 0);
-  if (personas > capacidad) return error(`Ese cuarto aloja hasta ${capacidad} personas. Elige otro cuarto o agrega cama extra.`);
+  const capacidad = elegidas.reduce((s, h) => s + h.cuarto.cap * h.cant, 0) + (extras.some(x => x.id === 'cama') ? 1 : 0);
+  if (personas > capacidad) return error(`Las habitaciones elegidas alojan hasta ${capacidad} personas. Agrega otra habitación.`);
 
   // Cuenta noches de temporada alta y baja
   let altas = 0;
@@ -117,8 +135,10 @@ form.addEventListener('submit', (e) => {
   const bajas = noches - altas;
 
   const lineas = [];
-  if (bajas) lineas.push([`${bajas} ${bajas === 1 ? 'noche' : 'noches'} × ${mxn(cuarto.baja)}`, bajas * cuarto.baja]);
-  if (altas) lineas.push([`${altas} ${altas === 1 ? 'noche' : 'noches'} temporada alta × ${mxn(cuarto.alta)}`, altas * cuarto.alta]);
+  elegidas.forEach(({cuarto, cant}) => {
+    if (bajas) lineas.push([`${cant} × ${cuarto.n}: ${bajas} ${bajas === 1 ? 'noche' : 'noches'} × ${mxn(cuarto.baja)}`, cant * bajas * cuarto.baja]);
+    if (altas) lineas.push([`${cant} × ${cuarto.n}: ${altas} ${altas === 1 ? 'noche' : 'noches'} temporada alta × ${mxn(cuarto.alta)}`, cant * altas * cuarto.alta]);
+  });
   extras.forEach(x => {
     const veces = x.modo === 'persona-noche' ? personas * noches : x.modo === 'noche' ? noches : 1;
     lineas.push([`${x.n} (${veces} × ${mxn(x.precio)})`, veces * x.precio]);
@@ -131,7 +151,7 @@ form.addEventListener('submit', (e) => {
     `• Entrada: ${fecha(entrada)}`,
     `• Salida: ${fecha(salida)} (${noches} ${noches === 1 ? 'noche' : 'noches'})`,
     `• Personas: ${adultos} adultos, ${ninos} niños`,
-    `• Cuarto: ${cuarto.n}`,
+    `• Habitaciones: ${elegidas.map(h => `${h.cant} ${h.cuarto.n}`).join(', ')}`,
     extras.length ? `• Extras: ${extras.map(x => x.n).join(', ')}` : null,
     `• Total estimado: ${mxn(total)}`,
     '',
@@ -150,4 +170,4 @@ form.addEventListener('submit', (e) => {
 /* ============ CONTACTO ============ */
 $('#direccion').textContent = CONFIG.direccion;
 $('#horario').textContent = CONFIG.horario;
-$('#wa-contacto').href = wa(`Hola, tengo una pregunta sobre ${CONFIG.nombre}.`);s
+$('#wa-contacto').href = wa(`Hola, tengo una pregunta sobre ${CONFIG.nombre}.`);

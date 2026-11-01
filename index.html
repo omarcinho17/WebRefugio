@@ -41,13 +41,14 @@
         <h2>Menú</h2>
         <p class="sub">⭐ favorito de la casa · 🌶️ picante · 🌱 vegetariano</p>
         <div class="tabs" role="tablist" id="tabs" aria-label="Categorías del menú"></div>
-        <div id="lista" role="tabpanel"></div>
+        <div id="lista" class="carrusel" role="tabpanel"></div>
       </div>
     </section>
 
     <section id="cuartos">
       <div class="wrap">
         <h2>Cuartos</h2>
+        <p class="sub">Contamos con 2 habitaciones sencillas, para 2 adultos y 1 menor, y 2 habitaciones dobles, para hasta 4 personas.</p>
         <p class="sub">Tarifas por noche. En temporada alta el precio sube.</p>
         <div class="rooms" id="rooms"></div>
 
@@ -57,7 +58,7 @@
           <label>Salida <input type="date" name="salida" required></label>
           <label>Adultos <input type="number" name="adultos" min="1" max="10" value="2"></label>
           <label>Niños <input type="number" name="ninos" min="0" max="10" value="0"></label>
-          <label class="full">Tipo de cuarto <select name="cuarto"></select></label>
+          <fieldset id="habitaciones"><legend>Habitaciones</legend></fieldset>
           <fieldset id="extras"><legend>Extras</legend></fieldset>
           <button class="btn full" type="submit">Calcular cotización</button>
           <div id="resultado" role="status" aria-live="polite"></div>
