@@ -39,12 +39,21 @@ h2{font-size:clamp(1.9rem,5vw,2.7rem);margin-bottom:8px}
 .tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px}
 .tabs button{border:2px solid var(--ink);background:none;color:var(--ink);padding:8px 16px;border-radius:999px;font:500 1rem 'DM Sans',sans-serif;cursor:pointer;white-space:nowrap}
 .tabs button[aria-selected=true]{background:var(--ink);color:#fff}
-.item{display:flex;justify-content:space-between;gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
+.carrusel{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 16px;-webkit-overflow-scrolling:touch}
+.item{flex:0 0 min(78%,260px);scroll-snap-align:start;display:flex;flex-direction:column;background:#fff;border:2px solid var(--ink);border-radius:6px 24px 6px 24px;overflow:hidden}
+.foto{aspect-ratio:4/3;background:var(--line);display:grid;place-items:center;color:#4b6670;font-size:.9rem}
+.foto img{width:100%;height:100%;object-fit:cover;display:block}
+.info{display:flex;flex-direction:column;gap:4px;padding:14px 16px 16px;flex:1}
 .item h3{font-size:1.15rem}
-.item p{margin:4px 0 0;color:#4b6670;font-size:.95rem;max-width:56ch}
-.price{font-weight:700;white-space:nowrap}
+.item p{margin:0;color:#4b6670;font-size:.95rem}
+.price{font-weight:700;margin-top:auto;padding-top:8px}
 .item.out{opacity:.55}
 .item.out .price{color:var(--coral)}
+.horarios button{font-weight:700;border-color:var(--sea)}
+.horarios button[aria-selected=true]{background:var(--sea);border-color:var(--sea)}
+.hora{margin:0 0 14px;color:#4b6670;font-weight:500}
+.nota{margin:0 0 12px;font-weight:500}
+.item .extra{color:var(--sea);font-size:.9rem;font-weight:500}
 .tag{font-size:.8rem;margin-left:6px;vertical-align:middle}
 
 /* Cuartos */
