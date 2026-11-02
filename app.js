@@ -1,6 +1,6 @@
 const CONFIG = {
   nombre: 'Refugio del Sol',
-  whatsapp: '5219610000000',               
+  whatsapp: '529626009668',               
   direccion: 'Embarcadero Chocohuital S/N, 30545 Pijijiapan, Chis.',
   horario: 'Club de playa y restaurante abierto, sabados y domingos de 8:00 a 18:00',
   mesesAltos: [7, 8, 12]                   // 1 = enero ... 12 = diciembre
